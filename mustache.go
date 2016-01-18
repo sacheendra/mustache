@@ -505,15 +505,15 @@ func renderElement(element interface{}, contextChain []interface{}, buf io.Write
 		}
 
 		if val.IsValid() {
-			valueBytes, err := json.Marshal(val.Interface())
-			if err != nil {
-				return err
-			}
-
 			if elem.raw {
-				fmt.Fprint(buf, string(valueBytes))
+				fmt.Fprint(buf, val.Interface())
 			} else {
-				template.HTMLEscape(buf, valueBytes)
+				valueBytes, err := json.Marshal(val.Interface())
+				if err != nil {
+					return err
+				}
+
+				fmt.Fprint(buf, string(valueBytes))
 			}
 		}
 	case *sectionElement:
